@@ -7,7 +7,6 @@ This repo is a simple service that demonstrates the following:
     1. Deployment to DEV, UAT namespaces
     1. Canary deployments for isolated testing based on feature branches.
     1. Necessary cleanup to avoid leftover stale deployments
-    1. Self-Hosted github runner.
 
 1. Terraform for building the following infrastructure:
 
