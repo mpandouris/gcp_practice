@@ -36,3 +36,25 @@ image:
 start-container: image
 	@echo "Running Docker container $(FULL_IMAGE)..."
 	@podman run -it --rm -p $(PORT):8080 $(FULL_IMAGE)
+
+.PHONY: kustomize-dev
+kustomize-dev:
+	@echo "Generating complete YAML for DEV"
+	@kubectl kustomize deploy/k8s/overlays/dev
+
+.PHONY: kustomize-uat
+kustomize-uat:
+	@echo "Generating complete YAML for UAT"
+	@kubectl kustomize deploy/k8s/overlays/uat
+
+
+.PHONY: kustomize-%
+kustomize-prod:
+	@echo "Generating complete YAML for $*..."
+	@kubectl kustomize deploy/k8s/overlays/$*
+
+.PHONY: deploy-%
+deploy-%:
+	@echo "Deploying to $*..."
+	@kubectl apply -k deploy/k8s/overlays/$*
+
