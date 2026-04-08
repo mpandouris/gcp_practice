@@ -15,7 +15,8 @@ permissions:
 
 jobs:
   pipeline:
-    uses: mpandouris/platform/.github/workflows/golang-pipeline.yaml@stable
+    uses: mpandouris/platform/.github/workflows/golang-pipeline.yaml@kustomize
     with:
       service_name: basic-api
+      deploy_env: dev
     secrets: inherit
