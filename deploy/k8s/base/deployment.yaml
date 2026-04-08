@@ -5,6 +5,7 @@ metadata:
   labels:
     app: basic-api
 spec:
+  progressDeadlineSeconds: 120
   replicas: 1
   selector:
     matchLabels:
