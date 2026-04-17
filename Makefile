@@ -14,6 +14,11 @@ build:
 clean:
 	@echo "cleaning service..."
 	@rm $(BIN)/$(APP_NAME)
+	
+	@echo "deleting $(APP_NAME) k8s objects..."
+	@kubectl -n dev delete all -l app=basic-app
+	@kubectl -n uat delete all -l app=basic-app
+	@kubectl -n production delete all -l app=basic-app
 
 .PHONY: test
 test:
@@ -46,7 +51,6 @@ kustomize-dev:
 kustomize-uat:
 	@echo "Generating complete YAML for UAT"
 	@kubectl kustomize deploy/k8s/overlays/uat
-
 
 .PHONY: kustomize-%
 kustomize-prod:
