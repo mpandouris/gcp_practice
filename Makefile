@@ -61,4 +61,3 @@ kustomize-prod:
 deploy-%:
 	@echo "Deploying to $*..."
 	@kubectl apply -k deploy/k8s/overlays/$*
-
