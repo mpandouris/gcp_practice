@@ -9,10 +9,6 @@ on:
     branches:
       - main
 
-permissions:
-  contents: read
-  id-token: write
-
 jobs:
   pipeline:
     uses: mpandouris/platform/.github/workflows/golang-pipeline.yaml@stable
