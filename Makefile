@@ -1,8 +1,9 @@
 BIN=./build/bin
 BUILD=./build
-APP_NAME="basic_api"
+APP_NAME=basic-api
 IMAGE_TAG=$(shell git rev-parse --short HEAD)
 FULL_IMAGE=$(DOCKER_USER)/$(APP_NAME):$(IMAGE_TAG)
+BRANCH=$(shell git branch --show-current)
 
 .PHONY: build
 build:
@@ -13,12 +14,12 @@ build:
 .PHONY: clean
 clean:
 	@echo "cleaning service..."
-	@rm $(BIN)/$(APP_NAME)
+	@rm -f -- $(BIN)/$(APP_NAME)
 	
 	@echo "deleting $(APP_NAME) k8s objects..."
-	@kubectl -n dev delete all -l app=basic-app
-	@kubectl -n uat delete all -l app=basic-app
-	@kubectl -n production delete all -l app=basic-app
+	-@kubectl -n dev delete all -l app=$(APP_NAME)
+	-@kubectl -n uat delete all -l app=$(APP_NAME)
+	-@kubectl -n production delete all -l app=$(APP_NAME)
 
 .PHONY: test
 test:
