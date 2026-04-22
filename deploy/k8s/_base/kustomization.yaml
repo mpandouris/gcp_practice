@@ -1,0 +1,40 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - github.com/mpandouris/platform//deploy/golang-stateless-service?ref=stable
+
+commonLabels:
+  app: basic-api
+
+images:
+  - name: placeholder
+    newName: docker.io/mp42069/basic-api
+    newTag: latest
+
+patches:
+  - target:
+      kind: Deployment
+      name: app
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: basic-api
+      - op: replace
+        path: /spec/template/spec/containers/0/name
+        value: basic-api
+      - op: add
+        path: /spec/template/spec/containers/0/command
+        value: ["/app/basic_api"]
+      - op: add
+        path: /spec/template/spec/containers/0/args
+        value:
+          - "-port=$(PORT)"
+          - "-verbosity=$(VERBOSITY)"
+          - "-env=$(ENV)"
+  - target:
+      kind: Service
+      name: app
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: basic-api

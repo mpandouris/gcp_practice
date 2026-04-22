@@ -9,14 +9,13 @@ on:
     branches:
       - main
 
-permissions:
-  contents: read
-  id-token: write
-
 jobs:
   pipeline:
     uses: mpandouris/platform/.github/workflows/golang-pipeline.yaml@stable
     with:
       service_name: basic-api
       allow_feature_branch_deployment: true
+    permissions:
+      contents: write
+      id-token: write
     secrets: inherit

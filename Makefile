@@ -1,8 +1,9 @@
 BIN=./build/bin
 BUILD=./build
-APP_NAME="basic_api"
+APP_NAME=basic-api
 IMAGE_TAG=$(shell git rev-parse --short HEAD)
 FULL_IMAGE=$(DOCKER_USER)/$(APP_NAME):$(IMAGE_TAG)
+BRANCH=$(shell git branch --show-current)
 
 .PHONY: build
 build:
@@ -13,7 +14,12 @@ build:
 .PHONY: clean
 clean:
 	@echo "cleaning service..."
-	@rm $(BIN)/$(APP_NAME)
+	@rm -f -- $(BIN)/$(APP_NAME)
+	
+	@echo "deleting $(APP_NAME) k8s objects..."
+	-@kubectl -n dev delete all -l app=$(APP_NAME)
+	-@kubectl -n uat delete all -l app=$(APP_NAME)
+	-@kubectl -n production delete all -l app=$(APP_NAME)
 
 .PHONY: test
 test:
@@ -47,7 +53,6 @@ kustomize-uat:
 	@echo "Generating complete YAML for UAT"
 	@kubectl kustomize deploy/k8s/overlays/uat
 
-
 .PHONY: kustomize-%
 kustomize-prod:
 	@echo "Generating complete YAML for $*..."
@@ -57,4 +62,3 @@ kustomize-prod:
 deploy-%:
 	@echo "Deploying to $*..."
 	@kubectl apply -k deploy/k8s/overlays/$*
-
